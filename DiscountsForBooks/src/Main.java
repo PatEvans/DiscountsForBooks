@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 
+
 public class Main {
 	private static Book mobyDick=new Book("Moby Dick","1851", "£15.20");
 	private static Book maxSim=new Book("The Terrible Privacy of Maxwell Sim", "2010", "£13.14");
@@ -25,7 +26,7 @@ public class Main {
 		boolean type=false;
 		Discount currentDiscount = null;
 		if(type==false) {
-			currentDiscount=new NewDiscount(0.9,2000);
+			currentDiscount=new YearDiscount(0.9,2000);
 		}
 		discountsToApply.add(currentDiscount);
 		type=true;
@@ -34,5 +35,42 @@ public class Main {
 		}
 		discountsToApply.add(currentDiscount);
 		return discountsToApply;
+	}
+
+	static String calculatePrice(ArrayList<Book> shoppingList,ArrayList<Discount> discountsToApply) {
+		
+		//apply individual book discounts
+		double totalPrice = 0;
+		for(int i = 0; i < shoppingList.size(); i++) {
+		
+			double priceOfBook = shoppingList.get(i).getPrice();
+			
+			//apply all discounts that are applied to each book here
+			double percentageDiscount=1;
+			for(Discount discount: discountsToApply) {
+				if(discount.getDiscountType().equals("Individual")) {
+					percentageDiscount*=discount.discountToApply(mobyDick);
+				}
+			}
+			
+			totalPrice = priceOfBook*percentageDiscount;
+		}
+		
+		//apply all total price discounts here
+		double percentageDiscount=1;
+		for(Discount discount: discountsToApply) {
+			if(discount.getDiscountType().equals("Individual")) {
+				percentageDiscount*=discount.discountToApply(mobyDick);
+			}
+		}
+		totalPrice = totalPrice*percentageDiscount;
+		
+		//ensure no floating point rounding error
+		//always round final down to the penny
+		int integerPrice = (int) totalPrice;
+		
+		Float formattedPrice=(float)integerPrice/100;
+		String finalPrice = String.format("£%.2f" ,formattedPrice);
+		return finalPrice;
 	}
 }
