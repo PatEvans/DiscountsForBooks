@@ -1,6 +1,13 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 public class Main {
 	private static Book mobyDick=new Book("Moby Dick","1851", "£15.20");
@@ -17,26 +24,46 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//load in discounts from XML
-		ArrayList<Discount> discountsToApply = importDiscounts();
-		
+		ArrayList<Discount> discountsToApply = loadDiscounts();
+		ArrayList<Book> shoppingList = new ArrayList<Book>();
+		shoppingList.add(mobyDick);
+		shoppingList.add(threeMen);
+		String totalPrice=calculatePrice(shoppingList,discountsToApply);
+		System.out.println(totalPrice);
 	}
 	
-	public static ArrayList<Discount> importDiscounts(){
+	public static ArrayList<Discount> loadDiscounts(){
 		ArrayList<Discount> discountsToApply = new ArrayList<Discount>();
-		boolean type=false;
-		Discount currentDiscount = null;
-		if(type==false) {
-			currentDiscount=new YearDiscount(0.9,2000);
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		Document document = null;
+		try {
+			builder = factory.newDocumentBuilder();
+			document = builder.parse(new File("src/Discounts.xml"));
+		} catch (ParserConfigurationException |SAXException | IOException e) {
+
+			e.printStackTrace();
 		}
-		discountsToApply.add(currentDiscount);
-		type=true;
-		if(type==true) {
-			currentDiscount=new PriceDiscount(0.95,3000);
+		
+		NodeList discountList = document.getElementsByTagName("Discount");
+		for (int i = 0; i < discountList.getLength(); i++) {
+			Element discountElem = (Element) discountList.item(i);
+			String type =  discountElem.getAttribute("type");
+			double percent = Double.parseDouble(discountElem.getAttribute("percent"));
+			int attribute =  Integer.parseInt(discountElem.getAttribute("attribute"));
+			Discount discount=null;
+			if(type.equals("Year")) {
+				discount=new YearDiscount(percent,attribute);
+			}else if(type.equals("Price")) {
+				discount=new PriceDiscount(percent,attribute);
+			}
+			discountsToApply.add(discount);
 		}
-		discountsToApply.add(currentDiscount);
+		
+		
 		return discountsToApply;
 	}
-
+	
 	static String calculatePrice(ArrayList<Book> shoppingList,ArrayList<Discount> discountsToApply) {
 		
 		//apply individual book discounts
