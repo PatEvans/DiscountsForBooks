@@ -10,24 +10,20 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 public class Main {
-	private static Book mobyDick=new Book("Moby Dick","1851", "£15.20");
-	private static Book maxSim=new Book("The Terrible Privacy of Maxwell Sim", "2010", "£13.14");
-	private static Book stilLife=new Book("Still Life With Woodpecker", "1980", "£11.05");
-	private static Book threeMen=new Book("Three Men in a Boat", "1889" ,"£12.87");
-	private static Book timeMachine=new Book("The Time Machine" ,"1895", "£10.43");
-	private static Book theCaves=new Book("The Caves of Steel", "1954", "£8.12");
-	private static Book theThoughts=new Book("Idle Thoughts of an Idle Fellow", "1886", "£7.32");
-	private static Book christmasCarol=new Book("A Christmas Carol", "1843", "£4.23");
-	private static Book twoCities=new Book("A Tale of Two Cities", "1859", "£6.32");
-	private static Book greatExpectations=new Book("Great Expectations", "1861", "£13.21");
+	
 	
 	public static void main(String[] args) {
+		//get books from command line
+		ArrayList<Book> shoppingList = new ArrayList<Book>();
+		for(int i = 0;i<args.length;i++) {
+			String[] bookArgs = args[i].split(",");
+			shoppingList.add(new Book(bookArgs[0],bookArgs[1],bookArgs[2]));
+			
+		}
 		
 		//load in discounts from XML
 		ArrayList<Discount> discountsToApply = loadDiscounts();
-		ArrayList<Book> shoppingList = new ArrayList<Book>();
-		shoppingList.add(mobyDick);
-		shoppingList.add(threeMen);
+		
 		String totalPrice=calculatePrice(shoppingList,discountsToApply);
 		System.out.println(totalPrice);
 	}
