@@ -42,28 +42,30 @@ public class Main {
 		//apply individual book discounts
 		double totalPrice = 0;
 		for(int i = 0; i < shoppingList.size(); i++) {
-		
-			double priceOfBook = shoppingList.get(i).getPrice();
+			Book book=shoppingList.get(i);
+			double priceOfBook = book.getPrice();
 			
-			//apply all discounts that are applied to each book here
-			double percentageDiscount=1;
+			//apply all discounts that are applied to individual books here
+			double individualDiscount=1;
 			for(Discount discount: discountsToApply) {
-				if(discount.getDiscountType().equals("Individual")) {
-					percentageDiscount*=discount.discountToApply(mobyDick);
-				}
+				
+					individualDiscount*=discount.discountToApply(book);
+				
 			}
 			
-			totalPrice = priceOfBook*percentageDiscount;
+			priceOfBook = priceOfBook*individualDiscount;
+			totalPrice+=priceOfBook;
 		}
 		
 		//apply all total price discounts here
-		double percentageDiscount=1;
+		double totalDiscount=1;
 		for(Discount discount: discountsToApply) {
-			if(discount.getDiscountType().equals("Total")) {
-				percentageDiscount*=discount.discountToApply(totalPrice);
-			}
+			
+				totalDiscount*=discount.discountToApply(totalPrice);
+			
 		}
-		totalPrice = totalPrice*percentageDiscount;
+		
+		totalPrice = totalPrice*totalDiscount;
 		
 		//ensure no floating point rounding error
 		//always round final down to the penny

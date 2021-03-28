@@ -2,7 +2,7 @@
 public class PriceDiscount extends Discount{
 	private int priceToApplyAt;
 	PriceDiscount(double percentDiscount,int price) {
-		super(percentDiscount,"Total");
+		super(percentDiscount);
 		this.priceToApplyAt=price;
 		// TODO Auto-generated constructor stub
 	}

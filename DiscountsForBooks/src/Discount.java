@@ -2,13 +2,10 @@
 public class Discount {
 	protected String discountType;
 	protected double percentDiscount;
-	Discount(double percentDiscount,String discountType){
-		this.discountType=discountType;
+	Discount(double percentDiscount){
 		this.percentDiscount=percentDiscount;
 	}
-	public String getDiscountType() {
-		return discountType;
-	}
+
 	public double discountToApply(Book book){
 	
 		
