@@ -59,8 +59,8 @@ public class Main {
 		//apply all total price discounts here
 		double percentageDiscount=1;
 		for(Discount discount: discountsToApply) {
-			if(discount.getDiscountType().equals("Individual")) {
-				percentageDiscount*=discount.discountToApply(mobyDick);
+			if(discount.getDiscountType().equals("Total")) {
+				percentageDiscount*=discount.discountToApply(totalPrice);
 			}
 		}
 		totalPrice = totalPrice*percentageDiscount;
