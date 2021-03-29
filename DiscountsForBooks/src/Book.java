@@ -5,10 +5,10 @@ public class Book {
 	private int year;
 	Book(String title, String year,String price){
 		this.title = title;
-		price=price.substring(1);
+		price=price.trim().substring(1);
 		//price in pennies
 		this.price = (int)(Double.parseDouble(price)*100);	
-		this.year = Integer.parseInt(year);
+		this.year = Integer.parseInt(year.trim());
 	}
 	
 	//gettter methods
