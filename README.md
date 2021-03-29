@@ -30,6 +30,6 @@ I have ensured that the program is future-proof by including an XML Loader for d
 
 are applied in the same way as current ones can be added by changing a single line in the Discount.xml file. I have
 
-also ensure comprehensive JUnit testing of the project to ensure that the XML loader works as well as the actual
+also ensured comprehensive JUnit testing of the project to ensure that the XML loader works as well as the actual
 
 calculation function of the program.
