@@ -1,6 +1,6 @@
 # DiscountsForBooks
 
-Calculates Discounts for a list of books. Books are presented as comand line args to the program in the form:
+Calculates Discounts for a list of books. Books are presented as command line args to the program in the form:
 
 "Title,Year,Price"
 
@@ -25,3 +25,11 @@ i.e:
 "A Tale of Two Cities,1859,£6.32"
 
 "Great Expectations,1861,£13.21"
+
+I have ensured that the program is future-proof by including an XML Loader for discounts. Therefore any new discounts that
+
+are applied in the same way as current ones can be added by changing a single line in the Discount.xml file. I have
+
+also ensure comprehensive JUnit testing of the project to ensure that the XML loader works as well as the actual
+
+calculation function of the program.
