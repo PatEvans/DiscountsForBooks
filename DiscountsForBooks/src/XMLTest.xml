@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Discounts>
+	<Discount type="Year" percent="0.9" attribute="2000"/>
+</Discounts>

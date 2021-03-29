@@ -3,7 +3,7 @@ public class YearDiscount extends Discount{
 	private int year;
 	YearDiscount(double percentDiscount,int year) {
 		super(percentDiscount);
-		this.year=year;
+		this.year = year;
 		// TODO Auto-generated constructor stub
 	}
 	public double discountToApply(Book book){
@@ -14,5 +14,7 @@ public class YearDiscount extends Discount{
 			return 1;
 		}
 	}
-
+	public int getYear() {
+		return year;
+	}
 }

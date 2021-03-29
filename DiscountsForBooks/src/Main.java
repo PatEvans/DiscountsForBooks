@@ -15,28 +15,28 @@ public class Main {
 	public static void main(String[] args) {
 		//get books from command line
 		ArrayList<Book> shoppingList = new ArrayList<Book>();
-		for(int i = 0;i<args.length;i++) {
+		for(int i = 0; i < args.length; i++) {
 			String[] bookArgs = args[i].split(",");
 			shoppingList.add(new Book(bookArgs[0],bookArgs[1],bookArgs[2]));
-			
 		}
 		
 		//load in discounts from XML
-		ArrayList<Discount> discountsToApply = loadDiscounts();
+		ArrayList<Discount> discountsToApply = loadDiscounts("src/Discounts.xml");
 		
-		String totalPrice=calculatePrice(shoppingList,discountsToApply);
+		//calculate total price
+		String totalPrice = calculatePrice(shoppingList,discountsToApply);
 		System.out.println(totalPrice);
 	}
 	
-	public static ArrayList<Discount> loadDiscounts(){
+	public static ArrayList<Discount> loadDiscounts(String fileName){
 		ArrayList<Discount> discountsToApply = new ArrayList<Discount>();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		Document document = null;
 		try {
 			builder = factory.newDocumentBuilder();
-			document = builder.parse(new File("src/Discounts.xml"));
-		} catch (ParserConfigurationException |SAXException | IOException e) {
+			document = builder.parse(new File(fileName));
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 
 			e.printStackTrace();
 		}
@@ -47,11 +47,11 @@ public class Main {
 			String type =  discountElem.getAttribute("type");
 			double percent = Double.parseDouble(discountElem.getAttribute("percent"));
 			int attribute =  Integer.parseInt(discountElem.getAttribute("attribute"));
-			Discount discount=null;
+			Discount discount = null;
 			if(type.equals("Year")) {
-				discount=new YearDiscount(percent,attribute);
+				discount = new YearDiscount(percent,attribute);
 			}else if(type.equals("Price")) {
-				discount=new PriceDiscount(percent,attribute);
+				discount = new PriceDiscount(percent,attribute);
 			}
 			discountsToApply.add(discount);
 		}
@@ -65,23 +65,23 @@ public class Main {
 		//apply individual book discounts
 		double totalPrice = 0;
 		for(int i = 0; i < shoppingList.size(); i++) {
-			Book book=shoppingList.get(i);
+			Book book = shoppingList.get(i);
 			double priceOfBook = book.getPrice();
 			
 			//apply all discounts that are applied to individual books here
-			double individualDiscount=1;
+			double individualDiscount = 1;
 			for(Discount discount: discountsToApply) {
 				
-					individualDiscount*=discount.discountToApply(book);
+					individualDiscount *= discount.discountToApply(book);
 				
 			}
 			
 			priceOfBook = priceOfBook*individualDiscount;
-			totalPrice+=priceOfBook;
+			totalPrice += priceOfBook;
 		}
 		
 		//apply all total price discounts here
-		double totalDiscount=1;
+		double totalDiscount = 1;
 		for(Discount discount: discountsToApply) {
 			
 				totalDiscount*=discount.discountToApply(totalPrice);
@@ -94,7 +94,7 @@ public class Main {
 		//always round final down to the penny
 		int integerPrice = (int) totalPrice;
 		
-		Float formattedPrice=(float)integerPrice/100;
+		Float formattedPrice = (float)integerPrice/100;
 		String finalPrice = String.format("£%.2f" ,formattedPrice);
 		return finalPrice;
 	}
